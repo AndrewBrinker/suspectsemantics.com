@@ -1,0 +1,52 @@
+---
+layout: post
+title: "Rust 2018"
+date: 2018-01-07 13:34:15 -0800
+comments: true
+categories: Rust
+---
+
+In this post I share a few small thoughts on what Rust should do in 2018, and more broadly about the current direction of the language.
+
+<!-- more -->
+
+## Tooling
+
+### A Lifetime Visualizer
+
+Rust should have a lifetime visualizer.
+
+What I mean by this is a tool that takes in some Rust program, and outputs a visual representation of that program’s control flow graph, and allows visualization of values’ lifetimes using that graph.
+
+In the days of lexical lifetimes, the need for a tool like this wasn’t there. One could trace out the lifetime from the lexical structure of the program. With the rise of non-lexical lifetimes, there are a growing number cases where lifetimes may not what one expects based on the lexical structure alone.
+
+I am not familiar enough with MIR to know how hard it would be to take MIR (which is, as I understand it, a control-flow graph representation of a Rust program) and visualize it. It may be that this is intractably hard, or that the amount of work it would take is enough to make this tool not doable in the next year. But hey, it seems like a good idea. 😄 
+
+## Documentation
+
+### Better Language Around Lifetimes
+
+One common source of confusion I’ve found is that many writings about Rust, or explanations people offer about Rust, do not adequately differentiate between “lifetimes” and “lifetime variables.”
+
+A “lifetime” is how long a particular piece of data is accessible within the program (the time between its definition and it going out of scope and its underlying memory being reclaimed).
+
+A “lifetime variable” is a constraint on a type, trait, or function. Many of these are boilerplate to say “yes, I recognize that this piece of input data will only live a certain amount of time.” Sometimes you will constraints placed on lifetimes to say, for example: “the lifetime of some data A is larger than some data B.”
+
+These two terms clearly mean substantially different things, one is a concrete attribute of a piece of data, the other is a constraint used to verify safety. I don’t know if we need new terms, or just to be more careful with the terms we do use, but it certainly feels like a place we fall down a lot right now.
+
+## Things I Don’t Care About As Much
+
+Rust compiling into WebAssembly seems cool. It also seems a bit like the sort of nerd-sniping coolness that draws work away from more urgent areas. I like JavaScript, I like the web, and I like WebAssembly. I don’t want any of these to be take to imply in any way that the web isn’t a valid and massively important platform, or that those who are interested in or work on the web aren’t serious engineers. My sole concern is that the Rust/WebAssembly world is getting more attention than it is worth. But hey, at the same time, people can do what they please, and people aren’t utility optimizers. Work on what you want to work on. ❤️ 
+
+## Things I Am Worried About
+
+The open question of unsoundness in the interaction between specialization and lifetimes ([issue #40582](https://github.com/rust-lang/rust/issues/40582)) is… worrisome. It sounds like there was some initial hope that this would be inherently fixed by Chalk, but it sounds like this has proven to be more complicated than expected. We’ll see where it lands.
+
+## Funny Things
+
+[This issue](https://github.com/rust-lang/rust/issues/29743), marked as being hard to resolve on the Rust issue tracker, shows that there is some strange interaction of indexing and arithmetic which causes sensible code to be rejected by the compiler, but with an error message that doesn’t seem to make much sense. Sounds like it was expected that MIR would fix it, and it didn’t. It looks like has just recently been / is about to be resolved, which is good.
+
+## Conclusion
+
+This post was largely about odds and ends, because I think Rust is on the right track already for 2018, and should largely stay the course. There’s always lots of work on the margins, and lots of cool ideas that may never be fixed. All in all, Rust is in a good position, and I am excited for 2018!
+
